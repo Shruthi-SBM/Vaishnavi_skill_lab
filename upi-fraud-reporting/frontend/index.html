@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Fraud Reporting Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>UPI Fraud Reporting Portal</h1>
+            <p>Report and manage digital payment fraud incidents</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Message Alert Area -->
+        <div id="alertBox" class="alert hidden"></div>
+
+        <!-- Dashboard Section -->
+        <section class="dashboard">
+            <div class="card stat-card">
+                <h3>Total Reports</h3>
+                <p id="totalReports" class="stat-value">0</p>
+            </div>
+            <div class="card stat-card">
+                <h3>Pending</h3>
+                <p id="pendingReports" class="stat-value">0</p>
+            </div>
+            <div class="card stat-card">
+                <h3>Under Review</h3>
+                <p id="reviewReports" class="stat-value">0</p>
+            </div>
+            <div class="card stat-card">
+                <h3>Resolved</h3>
+                <p id="resolvedReports" class="stat-value">0</p>
+            </div>
+        </section>
+
+        <!-- Main Content Area: Form & List -->
+        <div class="content-grid">
+            
+            <!-- Submit Form Section -->
+            <section class="form-section card">
+                <h2 id="formTitle">Report a Fraud Incident</h2>
+                <form id="reportForm">
+                    <input type="hidden" id="editReportId">
+                    
+                    <div class="form-group">
+                        <label for="reporterName">Reporter Name *</label>
+                        <input type="text" id="reporterName" required minlength="2">
+                        <small class="error-msg" id="nameError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactNumber">Contact Number *</label>
+                        <input type="tel" id="contactNumber" required pattern="[0-9]{10}" placeholder="10-digit mobile number">
+                        <small class="error-msg" id="contactError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="incidentDate">Incident Date *</label>
+                        <input type="date" id="incidentDate" required>
+                        <small class="error-msg" id="dateError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="transactionInfo">Transaction/Payment Info</label>
+                        <input type="text" id="transactionInfo" placeholder="UPI Ref, VPA, etc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="amount">Amount Involved (₹) *</label>
+                        <input type="number" id="amount" required min="1">
+                        <small class="error-msg" id="amountError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="incidentType">Type of Incident *</label>
+                        <select id="incidentType" required>
+                            <option value="">Select Incident Type</option>
+                            <option value="UPI Scam">UPI Scam</option>
+                            <option value="Phishing">Phishing</option>
+                            <option value="Fake Customer Care">Fake Customer Care</option>
+                            <option value="Fraudulent Transaction">Fraudulent Transaction</option>
+                            <option value="Fake Payment Request">Fake Payment Request</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <small class="error-msg" id="typeError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description *</label>
+                        <textarea id="description" rows="4" required minlength="10" placeholder="Provide details of the incident..."></textarea>
+                        <small class="error-msg" id="descError"></small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additionalInfo">Additional Information</label>
+                        <textarea id="additionalInfo" rows="2"></textarea>
+                    </div>
+
+                    <!-- Status field only visible when editing -->
+                    <div class="form-group hidden" id="statusGroup">
+                        <label for="statusSelect">Update Status</label>
+                        <select id="statusSelect">
+                            <option value="Pending">Pending</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="Resolved">Resolved</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary" id="submitBtn">Submit Report</button>
+                        <button type="button" class="btn btn-secondary hidden" id="cancelEditBtn">Cancel Edit</button>
+                    </div>
+                </form>
+            </section>
+
+            <!-- Reports List Section -->
+            <section class="reports-section">
+                <div class="reports-header card">
+                    <h2>Submitted Reports</h2>
+                    <div class="filter-controls">
+                        <input type="text" id="searchInput" placeholder="Search by Name, ID, or Type...">
+                        <select id="statusFilter">
+                            <option value="All">All Statuses</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="Resolved">Resolved</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="loadingIndicator" class="loading">Loading reports...</div>
+                
+                <div id="reportsList" class="reports-list">
+                    <!-- Cards will be dynamically injected here -->
+                </div>
+                
+                <div id="noReportsMsg" class="hidden no-data">No fraud reports found.</div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Simple View Modal -->
+    <div id="viewModal" class="modal hidden">
+        <div class="modal-content card">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h2>Report Details</h2>
+            <div id="modalDetails" class="modal-details">
+                <!-- Details injected here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
